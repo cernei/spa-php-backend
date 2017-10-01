@@ -2,11 +2,11 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\CrudController;
 use Illuminate\Http\Request;
-use App\Models\Order;
+use App\Models\Product;
 
-class ProductController extends Controller
+class ProductController extends CrudController
 {
     /**
      * Show the profile for the given user.
@@ -16,8 +16,8 @@ class ProductController extends Controller
      */
 
     public function index() {
-        $products = Product::with(['parts','parts.options'])->all();
-
+        $products = Product::with(['parts','parts.options'])->get();
+        return response()->json($products);
     }
 
 

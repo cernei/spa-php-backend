@@ -18,12 +18,15 @@ class CrudController extends Controller
     public function __construct(Request $request)
     {
         $this->modelName = 'App\\Models\\' . ucfirst(str_singular($request->segment(2)));
+        $this->relations = isset($this->modelName::$relationsArr) ? array_keys($this->modelName::$relationsArr) : [];
     }
     
     public function index()
     {
 
-        $items = $this->modelName::orderBy('id','desc')->take(10)->get();
+        $items = $this->modelName::with($this->relations)->orderBy('id','desc')->take(10)->get();
+        $items = $this->_mergePivot($items->toArray());
+
         return response()->json($items);
     }
 
@@ -36,7 +39,7 @@ class CrudController extends Controller
         $model->fill($fields);
         $model->save();
 
-        $this->handleRelations($model, $request);
+        $this->_saveRelations($model, $request);
         
     }
 
@@ -46,28 +49,46 @@ class CrudController extends Controller
         $fields = $request->only($model->getFillable());
         $model->fill($fields);
         $model->save();
-        $this->handleRelations($model, $request);
+        $this->_saveRelations($model, $request);
     }    
 
     public function show($id)
     {
-        $relations = isset($this->modelName::$relationsArr) ? array_keys($this->modelName::$relationsArr) : [];
-        $model = $this->modelName::with($relations)->findOrFail($id);
-        $items = $model->toArray();
-        if ($relations) {
-            foreach ($relations as $relation) {
-                if ($items[$relation]) {
-                    foreach($items[$relation] as &$relation_item) {
-                        if ( isset($relation_item['pivot']) ) {
-                            $relation_item = $relation_item + $relation_item['pivot'];
-                            unset($relation_item['pivot']);
+
+        $model = $this->modelName::with($this->relations)->findOrFail($id);
+
+        $item = $model->toArray();
+        $item = $this->_mergePivot([$item]);
+
+        return response()->json($item);
+    }
+
+    public function _mergePivot($items)
+    {
+        if ($this->relations) {
+            // model defined list of relations
+            foreach ($this->relations as $relation) {
+                if ($items) {
+                    // items from DB
+                    foreach($items as &$item) {
+
+                        if ($item[$relation]) {
+                            foreach($item[$relation] as &$relation_item) {
+                                
+                                if ( isset($relation_item['pivot']) ) {
+                                    $relation_item = $relation_item + $relation_item['pivot'];
+                                    unset($relation_item['pivot']);
+                                }
+                            }
+                            unset($relation_item);
                         }
                     }
-                    unset($relation_item);
+                    unset($item);
                 }
             }
         }
-        return response()->json($items);
+
+        return $items;
     }
 
     public function destroy($id)
@@ -76,7 +97,7 @@ class CrudController extends Controller
         $model->delete();
     }
 
-    protected function handleRelations($model, $request)
+    protected function _saveRelations($model, $request)
     {
         $relations = $request->all();
         if ($relations) {

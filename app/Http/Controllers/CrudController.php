@@ -25,6 +25,8 @@ class CrudController extends Controller
     {
 
         $items = $this->modelName::with($this->relations)->orderBy('id','desc')->take(10)->get();
+        $items = $this->_getAllAccessors($items);
+
         $items = $this->_mergePivot($items->toArray());
 
         return response()->json($items);
@@ -55,12 +57,26 @@ class CrudController extends Controller
     public function show($id)
     {
 
-        $model = $this->modelName::with($this->relations)->findOrFail($id);
-
-        $item = $model->toArray();
+        $item = $this->modelName::with($this->relations)->findOrFail($id);
+        $item = $this->_getAllAccessors([$item]);
+        $item = $item[0]->toArray();
         $item = $this->_mergePivot([$item]);
 
-        return response()->json($item);
+        return response()->json($item[0]);
+    }
+
+    public function _getAllAccessors($items)
+    {
+
+        if ($this->modelName::$accessorsArr) {
+            foreach ($this->modelName::$accessorsArr as $value) {
+                foreach($items as &$item) {
+                    $item->$value = $item->{camel_case($value)};
+                }
+                
+            }
+        }
+        return $items;
     }
 
     public function _mergePivot($items)

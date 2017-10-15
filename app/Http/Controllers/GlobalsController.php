@@ -19,6 +19,10 @@ class GlobalsController extends Controller
     public function index() {
 
         $arr = [
+            'product_types' => [
+                ['id' => '1', 'name' => 'Meals'],
+                ['id' => '2', 'name' => 'Snaks and Drinks'],
+            ],
             'option_types' => Option::$types,
         ];
 

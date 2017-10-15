@@ -7,6 +7,8 @@ use App\Models\Option;
 
 class Part extends Model
 {
+	protected $fillable = ['name'];
+
 	public static $relationsArr = [
 		'options' => ['value']
 	];
@@ -24,6 +26,10 @@ class Part extends Model
 	{
 		$optionTypes = collect(Option::$types)->pluck('id', 'name')->toArray();
 
+		$arr = [];
+		
+
+
 		foreach($this->options as $option) {
 
 			switch($option->type) {
@@ -32,15 +38,17 @@ class Part extends Model
 					$arr[] = $option->values;
 					break;
 
+				case $optionTypes['checkbox']:
 				case $optionTypes['select']:
-					
-					$json = json_decode($option->values);
-					$arr[] = $json[$this->value] ?? null ;
+
+					$json = json_decode($option->values, true);
+
+					$arr[] = $json[$option->pivot->value] ? $option->name . ': ' . $json[$option->pivot->value]  : null ;
 					break;
 			}
 
 		}
 
-		return implode(', ', $arr);
+		if ($arr) return implode(', ', $arr);
 	}
 }

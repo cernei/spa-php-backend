@@ -18,7 +18,6 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->integer('category_id');
             $table->integer('price')->default(0);
-            $table->integer('currency_id');
             $table->timestamps();
         });
     }

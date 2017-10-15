@@ -7,9 +7,14 @@ use App\Models\Part;
 
 class Product extends Model
 {
+	protected $fillable = ['name', 'category_id'];
 
 	public static $relationsArr = [
 		'parts' => []
+	];
+
+	public static $accessorsArr = [
+
 	];
 	
 	public function parts()

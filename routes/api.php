@@ -23,4 +23,6 @@ Route::middleware('api')->resource('products', 'ProductController');
 Route::middleware('api')->resource('parts', 'CrudController');
 Route::middleware('api')->resource('options', 'CrudController');
 
+Route::middleware('api')->get('globals', 'GlobalsController@index');
+
 Route::middleware('api')->get('test', 'CrudController@test');

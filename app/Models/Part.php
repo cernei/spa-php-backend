@@ -20,17 +20,25 @@ class Part extends Model
 		return $this->belongsToMany(Option::class, 'part_options')->withPivot(self::$relationsArr['options']);
 	}
 
-	public function getOptionsSummaryAttribute() {
+	public function getOptionsSummaryAttribute()
+	{
+		$optionTypes = collect(Option::$types)->pluck('id', 'name')->toArray();
 
 		foreach($this->options as $option) {
 
-			if ($option->type === 1) {
-				$arr[] = $option->values;
-			} else if ($option->type === 2) {
-				$json = json_decode($option->values);
+			switch($option->type) {
+				case $optionTypes['info']:
+					
+					$arr[] = $option->values;
+					break;
 
-				$arr[] = $json[$this->value] ?? null ;
+				case $optionTypes['select']:
+					
+					$json = json_decode($option->values);
+					$arr[] = $json[$this->value] ?? null ;
+					break;
 			}
+
 		}
 
 		return implode(', ', $arr);

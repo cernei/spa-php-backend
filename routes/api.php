@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('api')->resource('categories', 'CrudController');
-Route::middleware('api')->resource('currencies', 'CrudController');
+Route::middleware('api')->resource('stores', 'CrudController');
 //Route::middleware('api')->resource('products', 'CrudController');
 Route::middleware('api')->resource('orders', 'CrudController');
 Route::middleware('api')->resource('domains', 'CrudController');

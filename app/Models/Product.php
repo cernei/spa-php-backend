@@ -12,6 +12,7 @@ class Product extends Model
 
 	public static $relationsArr = [
 		'parts' => [],
+		'stores' => ['price','is_active'],
 		'options' => ['value']
 	];
 
@@ -28,5 +29,10 @@ class Product extends Model
 	{
 		return $this->belongsToMany(Option::class, 'product_options');
 	}	
+
+	public function stores()
+	{
+		return $this->belongsToMany(Store::class, 'product_stores');
+	}
 
 }

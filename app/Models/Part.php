@@ -35,15 +35,15 @@ class Part extends Model
 			switch($option->type) {
 				case $optionTypes['info']:
 					
-					$arr[] = $option->values;
-					break;
+					// $arr[] = $option->values;
+					// break;
 
 				case $optionTypes['checkbox']:
 				case $optionTypes['select']:
 
 					$json = json_decode($option->values, true);
 
-					$arr[] = $json[$option->pivot->value] ? $option->name . ': ' . $json[$option->pivot->value]  : null ;
+					$arr[] = isset($json[$option->pivot->value]) ? $option->name . ': ' . $json[$option->pivot->value]  : null ;
 					break;
 			}
 

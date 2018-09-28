@@ -12,17 +12,22 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::middleware('api')->resource('users', 'CrudController');
+Route::middleware('api')->resource('groups', 'CrudController');
 
+Route::middleware('api')->resource('currencies', 'CrudController');
 Route::middleware('api')->resource('categories', 'CrudController');
 Route::middleware('api')->resource('stores', 'CrudController');
 //Route::middleware('api')->resource('products', 'CrudController');
 Route::middleware('api')->resource('orders', 'CrudController');
-Route::middleware('api')->resource('domains', 'CrudController');
+
 
 Route::middleware('api')->resource('products', 'ProductController');
 Route::middleware('api')->resource('parts', 'CrudController');
 Route::middleware('api')->resource('options', 'CrudController');
 
 Route::middleware('api')->get('globals', 'GlobalsController@index');
+
+Route::middleware('api')->get('batch', 'BatchController@index');
 
 Route::middleware('api')->get('test', 'CrudController@test');

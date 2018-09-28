@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Store extends Model
 {
-	protected $fillable = ['name'];
+    protected $fillable = ['name'];
 
-	public static $accessorsArr = [
+    public static $accessorsArr = [
 
-	];
+    ];
 
     public function stores()
     {

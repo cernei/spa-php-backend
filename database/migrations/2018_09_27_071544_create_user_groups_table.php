@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePartOptionsTable extends Migration
+class CreateUserGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreatePartOptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('part_options', function (Blueprint $table) {
+        Schema::create('user_groups', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('part_id');
-            $table->integer('option_id');
-            $table->integer('value');
+            $table->integer('user_id');
+            $table->integer('group_id');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreatePartOptionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('part_options');
+        Schema::dropIfExists('user_groups');
     }
 }

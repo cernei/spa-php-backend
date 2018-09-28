@@ -17,7 +17,7 @@ class CreateProductOptionsTable extends Migration
             $table->increments('id');
             $table->integer('product_id');
             $table->integer('option_id');
-            $table->integer('value');            
+            $table->integer('value');
             $table->timestamps();
         });
     }

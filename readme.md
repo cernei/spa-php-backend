@@ -25,7 +25,7 @@ That's it. Your resource endpoints for ```categories``` are ready.
 In order to include relations into single record endpoint (```entity/:id```) do this:
 ``` php
 // app/Models/User.php
-...
+//...
 public static $relationsArr = [
     'groups' => ['pivot_column1']
 ];
@@ -34,10 +34,10 @@ public function groups()
 {
     return $this->belongsToMany(Group::class, 'user_groups');
 }
-...
+//...
 ```
 And now your result would be like this:
-```
+``` json
 {
     "id":1,
     "name":"user",
@@ -63,7 +63,7 @@ You can include accessors into result by specifying their names.
 ``` php
 // app/Models/User.php
 
-...
+//...
 public static $accessorsArr = [
     'hello'
 ];
@@ -72,11 +72,11 @@ public function getHelloAttribute()
 {
     return 'Hello';
 }
-...
+//...
 ```
 You will get:
 
-```
+``` json
 {
     "id":1,
     "name":"user",
